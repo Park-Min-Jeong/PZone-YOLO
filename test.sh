@@ -1,1 +1,0 @@
-time ./darknet detector test data/testData.data cfg/yolov4-tiny-custom.cfg backup/yolov4-tiny-custom_last.weights -ext_output -dont_show -save_labels -out output.json data/images/test.jpg
