@@ -40,5 +40,9 @@ def test_null():
     test_return_result()
 
 
-test()
+def setting():
+    import subprocess
+    subprocess.run("./test.sh")
+# test()
 # test_null()
+setting()
