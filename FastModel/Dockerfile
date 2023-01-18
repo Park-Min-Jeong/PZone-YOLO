@@ -4,9 +4,9 @@ WORKDIR /home/
 
 RUN echo "testing"
 
-RUN git clone https://github.com/Park-Min-Jeong/YOLO-Test.git
+RUN git clone https://github.com/Park-Min-Jeong/YOLO-Test.git 
 
-WORKDIR /home/FastModel/
+WORKDIR /home/YOLO-Test/FastModel/
 
 RUN python -m pip install --upgrade pip
 
