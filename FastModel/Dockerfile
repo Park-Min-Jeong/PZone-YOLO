@@ -14,6 +14,10 @@ RUN pip install -r requirements.txt
 
 # RUN pip install gunicorn
 
+RUN apt-get update
+
+RUN apt-get install libgl1-mesa-glx
+
 EXPOSE 8000
 
 CMD ["bash","-c","uvicorn main:app --reload --host=0.0.0.0 --port=8000"]
