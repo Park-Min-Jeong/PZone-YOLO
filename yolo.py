@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from PIL import Image
 
 # Load Yolo
 net = cv2.dnn.readNet("backup/yolov4-tiny-custom_best.weights", "backup/yolov4-tiny-custom.cfg")
@@ -11,8 +12,7 @@ output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
 # colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
 # Loading image
-img = cv2.imread("backup/test_null.jpg")
-# img = cv2.resize(img, None, fx=0.4, fy=0.4)
+img = cv2.imread("backup/test.jpg")
 height, width, channels = img.shape
 
 # Detecting objects
