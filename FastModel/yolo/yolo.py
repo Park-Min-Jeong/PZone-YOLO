@@ -6,7 +6,7 @@ import numpy as np
 # Load Yolo
 
 def Detector(filename):
-    BASE_DIR = "/home/FastModel/yolo"
+    BASE_DIR = "/home/YOLO-Test/FastModel/yolo"
     net = cv2.dnn.readNet(os.path.join(BASE_DIR,"backup/yolov4-tiny-custom_best.weights"),os.path.join(BASE_DIR,"backup/yolov4-tiny-custom.cfg"))
     with open(os.path.join(BASE_DIR,"backup/ClassNames.names"), "r") as f:
         classes = [line.strip() for line in f.readlines()]
