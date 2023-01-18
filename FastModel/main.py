@@ -6,7 +6,7 @@ from tempfile import NamedTemporaryFile
 from typing import IO
 
 from yolo.yolo import Detector
-from yolo.yolo_temp import *
+# from yolo.yolo_temp import *
 from fastapi import FastAPI,UploadFile,File
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
