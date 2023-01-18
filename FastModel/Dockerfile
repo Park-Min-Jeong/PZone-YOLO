@@ -16,4 +16,4 @@ RUN pip install gunicorn
 
 EXPOSE 8000
 
-CMD ["bash","-c"," gunicorn -k uvicorn.workers.UvicornWorker --access-logfile ./gunicorn-access.log main:app --bind 0.0.0.0:8000 --workers 2 --daemon"]
+CMD ["bash","-c","gunicorn -k uvicorn.workers.UvicornWorker --access-logfile ./gunicorn-access.log main:app --bind 0.0.0.0:8000 --workers 2 --daemon"]
