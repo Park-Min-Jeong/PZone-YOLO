@@ -1,6 +1,0 @@
-classes = 21
-train = data/list/train.txt
-valid = data/list/valid.txt
-test = data/list/test.txt
-names = data/ClassNames.names
-backup = backup
