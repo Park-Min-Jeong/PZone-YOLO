@@ -1,15 +1,18 @@
 import os
+
 import cv2
 import numpy as np
+import base64
+
 
 # Load Yolo
 
 def Detector(filename):
-    BASE_DIR = "/home/YOLO-Test/yolo"
-    # BASE_DIR = "d:/study/Git/YOLO-Test/yolo"
-    net = cv2.dnn.readNetFromDarknet(os.path.join(BASE_DIR, "backup/surface.cfg"), os.path.join(BASE_DIR, "backup/surface_final.weights"))
-    # with open(os.path.join(BASE_DIR,"backup/surface.names"), "r") as f:
-    #     classes = [line.strip() for line in f.readlines()]
+    BASE_DIR = "/home/YOLO-Test/FastModel/yolo"
+    net = cv2.dnn.readNet(os.path.join(BASE_DIR, "backup/yolov4-tiny-custom_best.weights"),
+                          os.path.join(BASE_DIR, "backup/yolov4-tiny-custom.cfg"))
+    with open(os.path.join(BASE_DIR, "backup/ClassNames.names"), "r") as f:
+        classes = [line.strip() for line in f.readlines()]
     layer_names = net.getLayerNames()
     output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
     # colors = np.random.uniform(0, 255, size=(len(classes), 3))
@@ -42,4 +45,8 @@ def Detector(filename):
                 boxes.append([x, y, w, h])
                 class_ids.append(class_id)
 
-    return {"length": len(class_ids), "Kinds": list(set(class_ids))}
+    is_success, img_buf_arr = cv2.imencode(".png", img)
+    encoded_img = base64.b64encode(img_buf_arr.tobytes())  # base64로 변환
+    uri = f"data:image/png;base64,{str(encoded_img)[2:-2]}"
+
+    return {"length": len(class_ids), "Kinds": list(set(class_ids)), "uri": uri}
