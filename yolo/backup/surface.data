@@ -1,0 +1,6 @@
+classes = 4
+train = data/list/surface/train.txt
+valid = data/list/surface/valid.txt
+test = data/list/surface/test.txt
+names = custom/surface.names
+backup = custom
