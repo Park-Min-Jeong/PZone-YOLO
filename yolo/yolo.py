@@ -1,6 +1,9 @@
 import os
+
 import cv2
 import numpy as np
+import base64
+
 
 # Load Yolo
 
@@ -43,16 +46,21 @@ def Detector(filename, modelname):
                 boxes.append([x, y, w, h])
                 class_ids.append(class_id)
                 class_names.append(classes[int(class_id)])
+
+    # show_img = img.copy()
     # for i in range(len(boxes)):
     #     box = boxes[i]
-    #     cv2.rectangle(img, (box[0], box[1]), (box[0]+box[2], box[1]+box[3]), color=colors[class_ids[i]], thickness=2)
+    #     cv2.rectangle(show_img, (box[0], box[1]), (box[0]+box[2], box[1]+box[3]), color=colors[class_ids[i]], thickness=2)
     #
-    # cv2.imshow("image", img)
+    # cv2.imshow("image", show_img)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
 
+    is_success, img_buf_arr = cv2.imencode(".png", img)
+    encoded_img = base64.b64encode(img_buf_arr.tobytes())  # base64로 변환
+    uri = f"data:image/png;base64,{str(encoded_img)[2:-2]}"
 
-    return {"length": len(class_ids), "Kinds": list(set(class_ids))}
+    return {"length": len(class_ids), "Kinds": list(set(class_ids)), "uri": uri}
 
 
 def Score(filename):
