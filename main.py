@@ -5,7 +5,7 @@ import uuid
 from tempfile import NamedTemporaryFile
 from typing import IO
 
-from yolo.yolo import Detector
+from yolo.yolo import Detector, Score
 # from yolo.yolo_temp import *
 from fastapi import FastAPI,UploadFile,File
 from fastapi.middleware.cors import CORSMiddleware
@@ -38,7 +38,7 @@ async def save_file(file: IO):
 async def store_file(file: UploadFile = File(...)):
     path = await save_file(file.file)
 
-    return Detector(path)
+    return Score(path)
 
 
 

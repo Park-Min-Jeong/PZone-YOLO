@@ -1,0 +1,6 @@
+classes = 2
+train = data/list/kickboard/train.txt
+valid = data/list/kickboard/valid.txt
+test = data/list/kickboard/test.txt
+names = custom/kickboard.names
+backup = custom
