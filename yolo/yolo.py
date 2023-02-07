@@ -51,7 +51,7 @@ def Detector(filename, modelname):
     # for i in range(len(boxes)):
     #     box = boxes[i]
     #     cv2.rectangle(show_img, (box[0], box[1]), (box[0]+box[2], box[1]+box[3]), color=colors[class_ids[i]], thickness=2)
-    #
+
     # cv2.imshow("image", show_img)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
