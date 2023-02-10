@@ -105,10 +105,10 @@ def Score(filename):
             wheel_list.append(box)
 
 
-        # 바퀴와 박스 간 최대 거리 계산 -> 1 - 최대 거리로 점수 계산
+        # 바퀴와 박스 간 최소 거리 계산 -> 1 - 최소 거리로 점수 계산
         # score = 0
         for key in surface_result.keys():
-            max_distance = 0
+            min_distance = 1.5
 
             for w_box in wheel_list:  # 바퀴 여러 개
                 for box in surface_result[key]:  # 금지구역 마커
@@ -116,13 +116,13 @@ def Score(filename):
                         if (box[0] > w_box[0] + w_box[2]) or (box[1] > w_box[1] + w_box[3]) or (box[0] + box[2] < w_box[0]) or (box[1] + box[3] < w_box[1]):
                             continue
                     distance = math.dist((w_box[4], box[4]), (w_box[5], box[5]))  # 유클리드 거리
-                    if distance > max_distance:
-                        max_distance = distance
+                    if distance < min_distance:
+                        min_distance = distance
 
-            if max_distance > 1:
+            if min_distance > 1:
                 image_score[key] = 0
             else:
-                image_score[key] = 1 - max_distance
+                image_score[key] = 1 - min_distance
 
 
     return {"kickboard": kickboard,
