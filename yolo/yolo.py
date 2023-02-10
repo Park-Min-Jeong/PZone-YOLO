@@ -29,8 +29,8 @@ def showBoxImage(image, result):
 
 def Detector(filename, modelname):
     # Loading model
-    BASE_DIR = "/home/YOLO-Test/yolo"
-    # BASE_DIR = "d:/study/Git/YOLO-Test/yolo"
+    # BASE_DIR = "/home/YOLO-Test/yolo"
+    BASE_DIR = "d:/study/Git/YOLO-Test/yolo"
     net = cv2.dnn.readNetFromDarknet(os.path.join(BASE_DIR, f"backup/{modelname}.cfg"), os.path.join(BASE_DIR, f"backup/{modelname}_best.weights"))
     with open(os.path.join(BASE_DIR, f"backup/{modelname}.names"), "r") as f:
         classes = [line.strip() for line in f.readlines()]
@@ -65,14 +65,12 @@ def Detector(filename, modelname):
                 )
 
     # boxed image
-    # showBoxImage(img, yolo_result)
+    showBoxImage(img, yolo_result)
 
     return yolo_result
 
 
 def Score(filename):
-    print(filename)
-    print(cv2.imread(filename))
     surface_result = Detector(filename, "surface")
     kickboard_result = Detector(filename, "kickboard")
 
@@ -83,7 +81,19 @@ def Score(filename):
     # 킥보드가 없는 경우
     if len(kickboard_result["kickboard"]) == 0:
         kickboard = False
-        # kindList.append("kickboard")
+
+        wheel_array = np.array(kickboard_result["wheel"])
+        max_w_idx, max_h_idx = np.argmax(wheel_array, axis=0)[2:4]
+        idx = max_w_idx
+        if max_w_idx != max_h_idx:
+            max_w, max_h = wheel_array[max_w_idx, 2], wheel_array[max_h_idx, 3]
+            avg_w, avg_h = np.average(np.array(kickboard_result["wheel"]), axis=0)[2:4]
+            if max_w - avg_w < max_h - avg_h:
+                idx = max_h_idx
+
+        wheel_list = []
+        w_box = wheel_array[idx]
+        wheel_list.append(w_box)
 
     # 킥보드가 있는 경우
     else:
@@ -107,24 +117,24 @@ def Score(filename):
             wheel_list.append(box)
 
 
-        # 바퀴와 박스 간 최소 거리 계산 -> 1 - 최소 거리로 점수 계산
-        # score = 0
-        for key in surface_result.keys():
-            min_distance = 1.5
+    # 바퀴와 박스 간 최소 거리 계산 -> 1 - 최소 거리로 점수 계산
+    # score = 0
+    for key in surface_result.keys():
+        min_distance = 1.5
 
-            for w_box in wheel_list:  # 바퀴 여러 개
-                for box in surface_result[key]:  # 금지구역 마커
-                    if key == "sidewalk":  # 보도블럭은 바퀴가 보도블럭 위에 있을 때만 거리 계산
-                        if (box[0] > w_box[0] + w_box[2]) or (box[1] > w_box[1] + w_box[3]) or (box[0] + box[2] < w_box[0]) or (box[1] + box[3] < w_box[1]):
-                            continue
-                    distance = math.dist((w_box[4], box[4]), (w_box[5], box[5]))  # 유클리드 거리
-                    if distance < min_distance:
-                        min_distance = distance
+        for w_box in wheel_list:  # 바퀴 여러 개
+            for box in surface_result[key]:  # 금지구역 마커
+                if key == "sidewalk":  # 보도블럭은 바퀴가 보도블럭 위에 있을 때만 거리 계산
+                    if (box[0] > w_box[0] + w_box[2]) or (box[1] > w_box[1] + w_box[3]) or (box[0] + box[2] < w_box[0]) or (box[1] + box[3] < w_box[1]):
+                        continue
+                distance = math.dist((w_box[4], box[4]), (w_box[5], box[5]))  # 유클리드 거리
+                if distance < min_distance:
+                    min_distance = distance
 
-            if min_distance > 1:
-                image_score[key] = 0
-            else:
-                image_score[key] = 1 - min_distance
+        if min_distance > 1:
+            image_score[key] = 0
+        else:
+            image_score[key] = 1 - min_distance
 
 
     return {"kickboard": kickboard,
