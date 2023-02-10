@@ -29,8 +29,8 @@ def showBoxImage(image, result):
 
 def Detector(filename, modelname):
     # Loading model
-    # BASE_DIR = "/home/YOLO-Test/yolo"
-    BASE_DIR = "d:/study/Git/YOLO-Test/yolo"
+    BASE_DIR = "/home/YOLO-Test/yolo"
+    # BASE_DIR = "d:/study/Git/YOLO-Test/yolo"
     net = cv2.dnn.readNetFromDarknet(os.path.join(BASE_DIR, f"backup/{modelname}.cfg"), os.path.join(BASE_DIR, f"backup/{modelname}_best.weights"))
     with open(os.path.join(BASE_DIR, f"backup/{modelname}.names"), "r") as f:
         classes = [line.strip() for line in f.readlines()]
