@@ -1,15 +1,10 @@
-import base64
-# import io
-import os
-import uuid
 from tempfile import NamedTemporaryFile
 from typing import IO
 
-# from yolo.yolo import Detector
 from yolo.yolo import Detector, Score
-# from yolo.yolo_temp import *
 from fastapi import FastAPI,UploadFile,File
 from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
 origins = ['*']
 app.add_middleware(
@@ -19,65 +14,28 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
 async def save_file(file: IO):
     # s3 업로드라고 생각해 봅시다. delete=True(기본값)이면
     # 현재 함수가 닫히고 파일도 지워집니다.
     with NamedTemporaryFile("wb", delete=False) as tempfile:
         tempfile.write(file.read())
         return tempfile.name
+
+
 @app.post("/file/store")
 async def store_file(file: UploadFile = File(...)):
     path = await save_file(file.file)
 
-    # return Detector(path)
     return Score(path)
 
-# import base64
-# # import io
-# import os
-# import uuid
-# from tempfile import NamedTemporaryFile
-# from typing import IO
-#
-# from yolo.yolo import Detector, Score
-# from fastapi import FastAPI,UploadFile,File
-# from fastapi.middleware.cors import CORSMiddleware
-# app = FastAPI()
-#
-# origins = ['*']
-#
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=False,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-#
-# @app.get("/")
-# async def root():
-#     return {"message": "Hello World"}
-#
-# @app.post("/file/store")
-# async def save_file(file: IO):
-#     # s3 업로드라고 생각해 봅시다. delete=True(기본값)이면
-#     # 현재 함수가 닫히고 파일도 지워집니다.
-#     with NamedTemporaryFile("wb", delete=False) as tempfile:
-#         tempfile.write(file.read())
-#         return tempfile.name
-#
-#
-# @app.post("/file/store")
-# async def store_file(file: UploadFile = File(...)):
-#     path = await save_file(file.file)
-#
-#     return Score(path)
-#
-#
-#
+
 # # @app.post("/photo")
 # # async def upload_photo(file: UploadFile):
 # #     UPLOAD_DIR = "./photo"  # 이미지를 저장할 서버 경로
