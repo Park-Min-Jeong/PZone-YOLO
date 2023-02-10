@@ -7,7 +7,7 @@ import base64
 
 def imageEncode(filename):
     image = cv2.imread(filename)
-    is_success, img_buf_arr = cv2.imencode(filename[-4:], image)
+    is_success, img_buf_arr = cv2.imencode(".jpg", image)
     encoded_img = base64.b64encode(img_buf_arr.tobytes())  # base64로 변환
     uri = f"data:image/*;base64,{str(encoded_img)[2:-2]}"
 
@@ -29,8 +29,8 @@ def showBoxImage(image, result):
 
 def Detector(filename, modelname):
     # Loading model
-    # BASE_DIR = "/home/YOLO-Test/yolo"
-    BASE_DIR = "d:/study/Git/YOLO-Test/yolo"
+    BASE_DIR = "/home/YOLO-Test/yolo"
+    # BASE_DIR = "d:/study/Git/YOLO-Test/yolo"
     net = cv2.dnn.readNetFromDarknet(os.path.join(BASE_DIR, f"backup/{modelname}.cfg"), os.path.join(BASE_DIR, f"backup/{modelname}_best.weights"))
     with open(os.path.join(BASE_DIR, f"backup/{modelname}.names"), "r") as f:
         classes = [line.strip() for line in f.readlines()]
@@ -71,6 +71,8 @@ def Detector(filename, modelname):
 
 
 def Score(filename):
+    print(filename)
+    print(cv2.imread(filename))
     surface_result = Detector(filename, "surface")
     kickboard_result = Detector(filename, "kickboard")
 
