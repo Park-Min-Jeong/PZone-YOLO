@@ -74,7 +74,7 @@ def Score(filename):
     surface_result = Detector(filename, "surface")
     kickboard_result = Detector(filename, "kickboard")
 
-    image_distance = {"sidewalk": 0, "crosswalk": 0, "braille_block": 0, "bike_lane": 0}
+    image_distance = {"sidewalk": 1.5, "crosswalk": 1.5, "braille_block": 1.5, "bike_lane": 1.5}
     wheel_list = []
 
     # 킥보드가 없는 경우
